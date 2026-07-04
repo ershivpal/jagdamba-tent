@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jagdamba Tent House | Karanga Chhota</title>
+<meta name="description" content="Jagdamba Tent House, Karanga Chhota — horses, cars, DJ, stages, tents, bedding, utensils, coolers & heaters for your Rajasthani wedding. 10+ years of trusted service." />
+
+<!-- Fonts: Yatra One (festive display), Poppins (body), Rajdhani (stats/utility) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          maroon: { DEFAULT: '#7A1F2B', dark: '#5A1620', light: '#9A2E3C' },
+          marigold: { DEFAULT: '#F2A93B', dark: '#D98F22' },
+          royal: { DEFAULT: '#1E3F66', dark: '#152C48' },
+          ivory: '#FBF6EC',
+          gold: '#C9A24B',
+          charcoal: '#2B1B12',
+        },
+        fontFamily: {
+          display: ['"Yatra One"', 'cursive'],
+          body: ['Poppins', 'sans-serif'],
+          utility: ['Rajdhani', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<!-- React -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Poppins', sans-serif; background: #FBF6EC; }
+  .font-display { font-family: 'Yatra One', cursive; }
+  .font-utility { font-family: 'Rajdhani', sans-serif; }
+
+  /* marquee for hero service strip */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .animate-marquee { animation: marquee 28s linear infinite; }
+
+  /* gentle fade-up reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #FBF6EC; }
+  ::-webkit-scrollbar-thumb { background: #C9A24B; border-radius: 8px; }
+
+  .whatsapp-pulse { animation: wapulse 2.4s ease-out infinite; }
+  @keyframes wapulse {
+    0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.55); }
+    70% { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
+    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  }
+</style>
+</head>
+<body class="text-charcoal">
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ---------- CONFIG (dummy placeholders — swap with real business info) ---------- */
+const WHATSAPP_NUMBER = "919876543210"; // TODO: replace with real WhatsApp number
+const PHONE_DISPLAY = "+91 98765 43210";
+const OWNER_NAME = "Rajendra Singh Shekhawat";
+const VILLAGE = "Karanga Chhota";
+
+function waLink(message) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+/* ---------- Reveal-on-scroll hook ---------- */
+function useReveal() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { el.classList.add('in'); obs.unobserve(el); }
+    }, { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+function Reveal({ children, className = "", delay = 0 }) {
+  const ref = useReveal();
+  return <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
+}
+
+/* ---------- Garland / toran divider (signature ornament) ---------- */
+function GarlandDivider({ bg = "#FBF6EC", flip = false }) {
+  return (
+    <div className={`w-full overflow-hidden leading-[0] ${flip ? 'rotate-180' : ''}`} style={{ background: bg }}>
+      <svg viewBox="0 0 1200 40" preserveAspectRatio="none" className="w-full h-6 md:h-8">
+        <path d="M0,0 
+          Q25,40 50,0 T100,0 T150,0 T200,0 T250,0 T300,0 T350,0 T400,0 T450,0 T500,0 T550,0 T600,0 T650,0 T700,0 T750,0 T800,0 T850,0 T900,0 T950,0 T1000,0 T1050,0 T1100,0 T1150,0 T1200,0 L1200,0 L0,0 Z"
+          fill="#7A1F2B" />
+        {Array.from({ length: 25 }).map((_, i) => (
+          <circle key={i} cx={i * 50 + 25} cy="18" r="4.5" fill="#F2A93B" />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+/* ---------- Icons (inline SVG, no deps) ---------- */
+const Icon = {
+  horse: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M4 20l1-5 2-6c.5-1.5 2-3 4-3h2c1 0 2 .5 2.5 1.5L17 10l3 1-1 2-2.5-.5-1 3 .5 4.5M9 15l-1 5"/><circle cx="15.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>,
+  car: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 13l1.5-4.5A2 2 0 016.4 7h11.2a2 2 0 011.9 1.5L21 13v5a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H6v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-5z"/><circle cx="7" cy="16" r="1.5"/><circle cx="17" cy="16" r="1.5"/></svg>,
+  dj: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="9" width="18" height="9" rx="1.5"/><circle cx="8" cy="13.5" r="2.2"/><circle cx="16" cy="13.5" r="2.2"/><path d="M6 9V7a6 6 0 0112 0v2"/></svg>,
+  stage: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg>,
+  tent: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 3l9 17H3l9-17z"/><path d="M12 3v17M7.5 11L12 20l4.5-9"/></svg>,
+  bed: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 18h18M3 18v2M21 18v2M6 10V7a2 2 0 012-2h2a2 2 0 012 2v3"/></svg>,
+  utensils: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M6 3v7a2 2 0 002 2h0a2 2 0 002-2V3M8 12v9M17 3c-1.5 0-3 1.5-3 4s1.5 4 3 4v9"/></svg>,
+  cooler: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="5" width="14" height="16" rx="1.5"/><path d="M8 9h8M8 13h8M12 5V3"/></svg>,
+  heater: (c="w-8 h-8") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10c0 1 1 1 1 2s-1 1-1 2M12 10c0 1 1 1 1 2s-1 1-1 2M16 10c0 1 1 1 1 2s-1 1-1 2"/></svg>,
+  home: (c="w-6 h-6") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 11.5L12 4l8 7.5M6 10v9a1 1 0 001 1h3v-6h4v6h3a1 1 0 001-1v-9"/></svg>,
+  image: (c="w-6 h-6") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5.5-5.5a1.5 1.5 0 00-2.1 0L4 19"/></svg>,
+  play: (c="w-6 h-6") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>,
+  whatsapp: (c="w-7 h-7") => <svg className={c} viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.699 4.61 1.902 6.48L4 29l7.72-1.868A11.93 11.93 0 0016 27c6.627 0 12-5.373 12-12S22.628 3 16.001 3zm6.965 17.014c-.3.845-1.478 1.55-2.418 1.75-.643.137-1.482.246-4.305-.924-3.613-1.497-5.938-5.14-6.12-5.379-.176-.24-1.457-1.938-1.457-3.696 0-1.758.921-2.622 1.248-2.982.328-.36.716-.45.954-.45.238 0 .477.002.685.012.22.01.516-.083.807.617.3.72 1.02 2.478 1.11 2.658.09.18.15.39.03.63-.12.24-.18.39-.36.6-.18.21-.378.469-.54.63-.18.18-.368.375-.158.735.21.36.936 1.545 2.01 2.503 1.38 1.23 2.544 1.611 2.904 1.791.36.18.57.15.78-.09.21-.24.9-1.05 1.14-1.41.24-.36.48-.3.81-.18.33.12 2.088.984 2.448 1.164.36.18.6.27.69.42.09.15.09.87-.21 1.715z"/></svg>,
+  phone: (c="w-5 h-5") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 5a2 2 0 012-2h2.5l1.5 5-2 1.5a11 11 0 006 6L14.5 14l5 1.5V20a2 2 0 01-2 2C10.716 22 2 13.284 2 3.5"/></svg>,
+  pin: (c="w-5 h-5") => <svg className={c} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>,
+};
+
+/* ---------- Data ---------- */
+const SERVICES = [
+  { key: "tent",     title: "Tent & Shamiyana",   hindi: "टेंट व शामियाना",  desc: "Sturdy tents in every size — from an intimate courtyard to a full baraat ground.", icon: Icon.tent },
+  { key: "stage",    title: "Stage & Mandap",     hindi: "स्टेज व मंडप",     desc: "Decorated stages and mandaps, built and dressed the traditional Rajasthani way.", icon: Icon.stage },
+  { key: "horse",    title: "Wedding Horse",      hindi: "बग्गी घोड़ी",      desc: "A well-groomed, decorated ghodi for the groom's baraat entry.", icon: Icon.horse },
+  { key: "car",      title: "Wedding Cars",       hindi: "बग्गी व कार",     desc: "Decorated cars for the baraat and family, on time, every time.", icon: Icon.car },
+  { key: "dj",       title: "DJ & Sound",         hindi: "डीजे व साउंड",    desc: "Full sound system and DJ to keep the baraat dancing till the mandap.", icon: Icon.dj },
+  { key: "bed",      title: "Bedding & Bistar",   hindi: "बिस्तर, कंबल, तकिया", desc: "Blankets, pillows, mattresses and bedding for every guest who stays over.", icon: Icon.bed },
+  { key: "utensils", title: "Utensils & Bartan",  hindi: "बर्तन",           desc: "Complete crockery and cooking utensils for feeding the whole baraat.", icon: Icon.utensils },
+  { key: "cooler",   title: "Coolers",            hindi: "कूलर",            desc: "Desert coolers set up and running, so summer weddings stay comfortable.", icon: Icon.cooler },
+  { key: "heater",   title: "Heaters",            hindi: "हीटर व अलाव",     desc: "Room heaters and bukhari arrangements for winter functions.", icon: Icon.heater },
+];
+
+const GALLERY = [
+  { keywords: "shamiyana,tent,wedding", w:800,h:1000, lock:11, label:"Shamiyana set-up" },
+  { keywords: "mandap,stage,decoration", w:800,h:600, lock:12, label:"Mandap decoration" },
+  { keywords: "horse,indianwedding,baraat", w:800,h:1000, lock:13, label:"Baraat ghodi" },
+  { keywords: "dj,lights,party", w:800,h:600, lock:14, label:"DJ & lighting" },
+  { keywords: "decoratedcar,wedding,vintage", w:800,h:600, lock:15, label:"Decorated baraat car" },
+  { keywords: "utensils,indiankitchen,steel", w:800,h:1000, lock:16, label:"Bartan arrangement" },
+  { keywords: "indianwedding,night,lighting", w:800,h:600, lock:17, label:"Night function lighting" },
+  { keywords: "tent,seating,event", w:800,h:1000, lock:18, label:"Guest seating tent" },
+];
+
+const TESTIMONIALS = [
+  { name: "Sohan Singh", village: "Karanga Chhota", text: "Jagdamba Tent ने मेरे बेटे की शादी में हर चीज़ समय पर लगा दी — टेंट, बर्तन, घोड़ी सब कुछ। भरोसेमंद काम।" },
+  { name: "Ram Lal Meena", village: "Bassi ke Balaji", text: "DJ se lekar heater tak, sab kuch ek hi jagah se mil gaya. Rajendra ji khud khade rehkar kaam karwate hain." },
+  { name: "Kamla Devi", village: "Naila", text: "बिस्तर, तकिए और कूलर की व्यवस्था बहुत अच्छी थी। मेहमानों को कोई तकलीफ नहीं हुई।" },
+];
+
+/* ---------- Sections ---------- */
+function Navbar() {
+  const links = [["#services","Services"],["#gallery","Gallery"],["#videos","Videos"],["#about","About"],["#contact","Contact"]];
+  return (
+    <header className="fixed top-0 inset-x-0 z-40 bg-ivory/95 backdrop-blur border-b border-gold/30">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+        <a href="#top" className="font-display text-2xl text-maroon">Jagdamba Tent House</a>
+        <nav className="hidden md:flex items-center gap-8 font-utility font-semibold text-charcoal/80 text-lg">
+          {links.map(([href,label]) => <a key={href} href={href} className="hover:text-maroon transition-colors">{label}</a>)}
+        </nav>
+        <a href={waLink("Namaste, mujhe Jagdamba Tent House se booking ki jaankari chahiye.")} target="_blank" rel="noopener noreferrer"
+           className="hidden md:inline-flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition">
+          {Icon.whatsapp("w-5 h-5")} WhatsApp
+        </a>
+      </div>
+    </header>
+  );
+}
+
+function Hero() {
+  const marqueeItems = [...SERVICES, ...SERVICES];
+  return (
+    <section id="top" className="relative pt-16">
+      <div className="relative h-[92vh] min-h-[560px] overflow-hidden">
+        <img src="https://loremflickr.com/1600/1200/indianwedding,mandap,decoration?lock=101" alt="Decorated wedding mandap at night"
+             className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-maroon-dark via-maroon-dark/70 to-maroon-dark/20"></div>
+        <div className="absolute inset-0 border-[10px] md:border-[16px] border-gold/70 m-2 md:m-4 pointer-events-none rounded-sm"></div>
+
+        <div className="relative h-full max-w-6xl mx-auto px-5 md:px-8 flex flex-col justify-center text-ivory">
+          <Reveal>
+            <p className="font-utility tracking-[0.3em] text-marigold uppercase text-sm md:text-base mb-3">Karanga Chhota &middot; Rajasthan</p>
+          </Reveal>
+          <Reveal delay={100}>
+            <h1 className="font-display text-4xl md:text-6xl leading-tight max-w-2xl">जगदम्बा टेंट हाउस</h1>
+          </Reveal>
+          <Reveal delay={200}>
+            <p className="mt-4 text-lg md:text-2xl max-w-xl text-ivory/90">Horses to heaters — everything your baraat needs, arranged by hand, for over 10 years.</p>
+          </Reveal>
+          <Reveal delay={300}>
+            <p className="mt-2 font-utility text-marigold text-lg">Proprietor: {OWNER_NAME}</p>
+          </Reveal>
+          <Reveal delay={400}>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a href={waLink("Namaste, mujhe apni shaadi ke liye booking karni hai.")} target="_blank" rel="noopener noreferrer"
+                 className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-semibold hover:brightness-95 transition">
+                {Icon.whatsapp("w-5 h-5")} Book on WhatsApp
+              </a>
+              <a href={`tel:+${WHATSAPP_NUMBER}`}
+                 className="inline-flex items-center gap-2 bg-marigold text-maroon-dark px-6 py-3 rounded-full font-semibold hover:brightness-95 transition">
+                {Icon.phone()} Call Now
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* service marquee strip */}
+      <div className="bg-maroon-dark py-4 overflow-hidden border-t-2 border-gold/40">
+        <div className="flex w-max animate-marquee">
+          {marqueeItems.map((s, i) => (
+            <div key={i} className="flex items-center gap-2 text-marigold/90 px-6 whitespace-nowrap font-utility font-semibold text-lg">
+              {s.icon("w-5 h-5")} {s.title}
+              <span className="text-gold/50 ml-6">&#10022;</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Stats() {
+  const items = [
+    { n: "10+", l: "Years in Business" },
+    { n: "500+", l: "Weddings Served" },
+    { n: "25+", l: "Villages Covered" },
+    { n: "9", l: "Services, One Call" },
+  ];
+  return (
+    <section className="bg-ivory">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+        {items.map((it, i) => (
+          <Reveal key={i} delay={i*80} className="text-center border-r last:border-r-0 border-gold/30">
+            <div className="font-utility font-bold text-4xl md:text-5xl text-maroon">{it.n}</div>
+            <div className="text-charcoal/70 mt-1 text-sm md:text-base">{it.l}</div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section id="about" className="bg-ivory">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16 grid md:grid-cols-2 gap-10 items-center">
+        <Reveal className="relative">
+          <div className="absolute -inset-3 border-2 border-gold rounded-lg"></div>
+          <img src="https://loremflickr.com/700/800/indianman,turban,portrait?lock=205" alt={`${OWNER_NAME}, owner of Jagdamba Tent House`}
+               className="relative w-full h-[420px] object-cover rounded-lg shadow-xl" />
+          <div className="absolute -bottom-6 -right-6 bg-maroon text-ivory rounded-full w-28 h-28 flex flex-col items-center justify-center font-utility border-4 border-marigold shadow-lg">
+            <span className="text-2xl font-bold leading-none">10+</span>
+            <span className="text-xs mt-1">Years</span>
+          </div>
+        </Reveal>
+        <Reveal delay={120}>
+          <p className="font-utility tracking-widest text-maroon uppercase text-sm mb-2">Our Story</p>
+          <h2 className="font-display text-3xl md:text-4xl text-maroon-dark mb-4">Chalo, jaan-pehchaan karte hain</h2>
+          <p className="text-charcoal/80 leading-relaxed mb-4">
+            Jagdamba Tent House has been arranging weddings in and around {VILLAGE} for over ten years. Under {OWNER_NAME}, the same family that hires us for one wedding calls us back for the next — because we show up, we set up on time, and we stay till the last guest leaves.
+          </p>
+          <p className="text-charcoal/80 leading-relaxed mb-6">
+            From the ghodi at the door to the heater in the guest tent, we handle it as our own function, not just a booking.
+          </p>
+          <ul className="grid grid-cols-2 gap-3 font-utility font-semibold text-charcoal/80">
+            <li className="flex items-center gap-2"><span className="text-marigold text-xl">&#10003;</span> On-time set-up</li>
+            <li className="flex items-center gap-2"><span className="text-marigold text-xl">&#10003;</span> One call, all services</li>
+            <li className="flex items-center gap-2"><span className="text-marigold text-xl">&#10003;</span> Village-trusted name</li>
+            <li className="flex items-center gap-2"><span className="text-marigold text-xl">&#10003;</span> Fair, upfront pricing</li>
+          </ul>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Services() {
+  return (
+    <section id="services" className="bg-maroon-dark relative">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16">
+        <Reveal className="text-center max-w-2xl mx-auto mb-12">
+          <p className="font-utility tracking-widest text-marigold uppercase text-sm mb-2">Saman &amp; Seva</p>
+          <h2 className="font-display text-3xl md:text-4xl text-ivory">सब कुछ, एक ही जगह</h2>
+          <p className="text-ivory/70 mt-3">Everything a Rajasthani wedding needs, arranged from a single phone call.</p>
+        </Reveal>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {SERVICES.map((s, i) => (
+            <Reveal key={s.key} delay={(i%3)*90}>
+              <div className="group bg-ivory/5 border border-gold/25 rounded-xl p-6 h-full hover:bg-ivory/10 hover:border-marigold/60 transition-colors">
+                <div className="w-14 h-14 rounded-full bg-marigold/15 text-marigold flex items-center justify-center mb-4 group-hover:bg-marigold group-hover:text-maroon-dark transition-colors">
+                  {s.icon()}
+                </div>
+                <h3 className="font-utility font-bold text-xl text-ivory">{s.title}</h3>
+                <p className="text-marigold/80 text-sm mb-2">{s.hindi}</p>
+                <p className="text-ivory/70 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Gallery() {
+  return (
+    <section id="gallery" className="bg-ivory">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16">
+        <Reveal className="text-center max-w-2xl mx-auto mb-10">
+          <p className="font-utility tracking-widest text-maroon uppercase text-sm mb-2">Jhalak</p>
+          <h2 className="font-display text-3xl md:text-4xl text-maroon-dark">हमारे काम की झलक</h2>
+          <p className="text-charcoal/70 mt-3">A glimpse of set-ups from recent functions. (Placeholder stock photos shown for now — real event photos to follow.)</p>
+        </Reveal>
+        <div className="columns-2 md:columns-4 gap-4 [column-fill:_balance]">
+          {GALLERY.map((g, i) => (
+            <Reveal key={i} delay={(i%4)*80} className="mb-4 break-inside-avoid">
+              <div className="relative overflow-hidden rounded-lg group">
+                <img src={`https://loremflickr.com/${g.w}/${g.h}/${g.keywords}?lock=${g.lock}`} alt={g.label}
+                     className="w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-maroon-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                  <span className="text-ivory text-sm font-semibold">{g.label}</span>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Videos() {
+  const videos = [
+    { title: "Baraat & Dhol Entry", poster: "indianwedding,baraat,dhol", lock: 31 },
+    { title: "Mandap Set-up Walkthrough", poster: "mandap,tent,setup", lock: 32 },
+  ];
+  return (
+    <section id="videos" className="bg-maroon-dark">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16">
+        <Reveal className="text-center max-w-2xl mx-auto mb-10">
+          <p className="font-utility tracking-widest text-marigold uppercase text-sm mb-2">Dekhiye</p>
+          <h2 className="font-display text-3xl md:text-4xl text-ivory">फंक्शन की वीडियो</h2>
+          <p className="text-ivory/70 mt-3">Placeholder clip shown for now — real function videos will replace this.</p>
+        </Reveal>
+        <div className="grid md:grid-cols-2 gap-6">
+          {videos.map((v, i) => (
+            <Reveal key={i} delay={i*120}>
+              <div className="border-2 border-gold/40 rounded-xl p-2 bg-ivory/5">
+                <video controls preload="none"
+                       poster={`https://loremflickr.com/900/500/${v.poster}?lock=${v.lock}`}
+                       className="w-full rounded-lg">
+                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <p className="text-ivory font-utility font-semibold text-center py-3">{v.title}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section className="bg-ivory">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16">
+        <Reveal className="text-center max-w-2xl mx-auto mb-10">
+          <p className="font-utility tracking-widest text-maroon uppercase text-sm mb-2">Log Kya Kehte Hain</p>
+          <h2 className="font-display text-3xl md:text-4xl text-maroon-dark">अपनों की बातें</h2>
+        </Reveal>
+        <div className="grid md:grid-cols-3 gap-6">
+          {TESTIMONIALS.map((t, i) => (
+            <Reveal key={i} delay={i*100}>
+              <div className="bg-white border border-gold/30 rounded-xl p-6 h-full shadow-sm relative">
+                <span className="absolute -top-4 left-6 text-5xl text-marigold font-display">&#8220;</span>
+                <p className="text-charcoal/80 leading-relaxed mt-4">{t.text}</p>
+                <div className="mt-5 pt-4 border-t border-gold/20">
+                  <p className="font-utility font-bold text-maroon">{t.name}</p>
+                  <p className="text-sm text-charcoal/60">{t.village}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section id="contact" className="bg-maroon-dark">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16 grid md:grid-cols-2 gap-10">
+        <Reveal>
+          <p className="font-utility tracking-widest text-marigold uppercase text-sm mb-2">Sampark Karein</p>
+          <h2 className="font-display text-3xl md:text-4xl text-ivory mb-6">बुकिंग के लिए बात करें</h2>
+          <div className="space-y-5 text-ivory/90">
+            <a href={waLink("Namaste, mujhe Jagdamba Tent House se booking ki jaankari chahiye.")} target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-3 bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/40 rounded-lg p-4 transition-colors">
+              <span className="bg-[#25D366] text-white rounded-full p-2">{Icon.whatsapp("w-5 h-5")}</span>
+              <div>
+                <p className="font-semibold">WhatsApp Us</p>
+                <p className="text-sm text-ivory/70">{PHONE_DISPLAY}</p>
+              </div>
+            </a>
+            <a href={`tel:+${WHATSAPP_NUMBER}`} className="flex items-center gap-3 bg-ivory/5 border border-gold/25 rounded-lg p-4">
+              <span className="bg-marigold text-maroon-dark rounded-full p-2">{Icon.phone()}</span>
+              <div>
+                <p className="font-semibold">Call Directly</p>
+                <p className="text-sm text-ivory/70">{PHONE_DISPLAY}</p>
+              </div>
+            </a>
+            <div className="flex items-center gap-3 bg-ivory/5 border border-gold/25 rounded-lg p-4">
+              <span className="bg-marigold text-maroon-dark rounded-full p-2">{Icon.pin()}</span>
+              <div>
+                <p className="font-semibold">Visit Us</p>
+                <p className="text-sm text-ivory/70">{OWNER_NAME}, {VILLAGE}, Rajasthan</p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+        <Reveal delay={120}>
+          <div className="border-2 border-gold/40 rounded-xl overflow-hidden h-full min-h-[320px]">
+            <iframe
+              title="Jagdamba Tent House location"
+              src="https://www.google.com/maps?q=Karanga+Chhota,+Rajasthan&output=embed"
+              className="w-full h-full min-h-[320px]" loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-maroon-dark border-t border-gold/25">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p className="font-display text-xl text-marigold">Jagdamba Tent House</p>
+        <p className="text-ivory/60 text-sm text-center">&copy; {new Date().getFullYear()} Jagdamba Tent House, {VILLAGE}. Proprietor: {OWNER_NAME}.</p>
+        <a href={waLink("Namaste")} target="_blank" rel="noopener noreferrer" className="text-ivory/60 text-sm hover:text-marigold">Contact on WhatsApp</a>
+      </div>
+    </footer>
+  );
+}
+
+function WhatsAppFloat() {
+  return (
+    <a href={waLink("Namaste, mujhe Jagdamba Tent House se booking ki jaankari chahiye.")}
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Chat on WhatsApp"
+       className="whatsapp-pulse hidden md:flex fixed bottom-6 right-6 z-50 bg-[#25D366] text-white rounded-full p-4 shadow-xl hover:brightness-95 transition">
+      {Icon.whatsapp("w-8 h-8")}
+    </a>
+  );
+}
+
+/* ---------- Mobile app-style bottom navigation ---------- */
+function BottomNav() {
+  const items = [
+    { id: "top",      label: "Home",     icon: Icon.home },
+    { id: "services", label: "Services", icon: Icon.tent },
+    { id: "gallery",  label: "Gallery",  icon: Icon.image },
+    { id: "videos",   label: "Videos",   icon: Icon.play },
+    { id: "contact",  label: "Contact",  icon: Icon.pin },
+  ];
+  const [active, setActive] = useState("top");
+
+  useEffect(() => {
+    const sections = items
+      .map(it => document.getElementById(it.id))
+      .filter(Boolean);
+    if (!sections.length) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    sections.forEach(s => obs.observe(s));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-ivory border-t border-gold/40 shadow-[0_-4px_16px_rgba(0,0,0,0.08)]"
+         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <div className="grid grid-cols-5">
+        {items.map((it) => {
+          const isActive = active === it.id;
+          return (
+            <a key={it.id} href={`#${it.id}`}
+               className={`flex flex-col items-center justify-center gap-0.5 py-2.5 transition-colors ${isActive ? 'text-maroon' : 'text-charcoal/50'}`}>
+              <span className={isActive ? 'scale-110 transition-transform' : 'transition-transform'}>{it.icon("w-5 h-5")}</span>
+              <span className="text-[11px] font-utility font-semibold">{it.label}</span>
+              {isActive && <span className="w-1.5 h-1.5 rounded-full bg-marigold mt-0.5"></span>}
+            </a>
+          );
+        })}
+      </div>
+      <a href={waLink("Namaste, mujhe Jagdamba Tent House se booking ki jaankari chahiye.")}
+         target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"
+         className="absolute -top-6 right-4 bg-[#25D366] text-white rounded-full p-3.5 shadow-lg border-4 border-ivory">
+        {Icon.whatsapp("w-6 h-6")}
+      </a>
+    </nav>
+  );
+}
+
+function App() {
+  return (
+    <div className="pb-16 md:pb-0">
+      <Navbar />
+      <Hero />
+      <Stats />
+      <GarlandDivider bg="#FBF6EC" />
+      <About />
+      <Services />
+      <GarlandDivider bg="#FBF6EC" flip />
+      <Gallery />
+      <Videos />
+      <Testimonials />
+      <Contact />
+      <Footer />
+      <WhatsAppFloat />
+      <BottomNav />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
